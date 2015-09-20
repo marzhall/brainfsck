@@ -1,3 +1,7 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 #define increment '+'
 #define decrement '-'
 #define shiftl '<'
@@ -141,6 +145,11 @@ int interpereter(char* program, char** result)
                freeStack(stack, 's');
                return 1;
         }
+    }
+
+    if (outputStack == NULL)
+    {
+        return 0;
     }
 
     // transcribe the outputs to a string in reverse order, starting from the latest output
