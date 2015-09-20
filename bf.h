@@ -12,11 +12,41 @@ typedef struct
     int location;
 } stackEntry;
 
-void interpereter(char* program)
+typedef struct
+{
+    void* previous;
+    char content;
+    int count;
+} output;
+
+void freeStack(void* stack, char type)
+{
+    switch (type)
+    {
+        case 'o':
+            while (stack != NULL)
+            {
+                output* tempOutput = (output*)stack;
+                stack = tempOutput->previous;
+                free(tempOutput);
+            }
+        case 's':
+            while (stack != NULL)
+            {
+                stackEntry* tempOutput = (stackEntry*)stack;
+                stack = tempOutput->previous;
+                free(tempOutput);
+            }
+    }
+
+}
+
+int interpereter(char* program, char** result)
 {
     int* stack = malloc(sizeof(int)*4096);
     int stackLocation = 0;
     stackEntry* bracketStack = NULL;
+    output* outputStack = NULL;
     for (int programPointer = 0; programPointer < strlen(program); programPointer++)
     {
         switch (program[programPointer])
@@ -34,8 +64,22 @@ void interpereter(char* program)
                 stackLocation++;
                 break;
             case print:
-                printf("%c", (char)stack[stackLocation]);
+            {
+                output* newOutput = malloc(sizeof(output));
+                newOutput->previous = outputStack;
+                newOutput->content = (char)stack[stackLocation];
+                if (outputStack == NULL)
+                {
+                    newOutput->count = 1;
+                }
+                else
+                {
+                    newOutput->count = outputStack->count + 1;
+                }
+
+                outputStack = newOutput;
                 break;
+            }
             case jumpBack:
             {
                 int breakEarly = 0;
@@ -45,7 +89,7 @@ void interpereter(char* program)
                     if (bracketStack == NULL)
                     {
                         printf("unmatched ']' at index %d.\n", programPointer);
-                        return;
+                        return 1;
                     }
 
                     programPointer = bracketStack->location;
@@ -82,8 +126,23 @@ void interpereter(char* program)
                 break;
             }
             default:
-               printf("junk character '%c' in program at index '%d. Quitting. \n'", program[programPointer], programPointer);
-               return;
+               printf("junk character '%c' at index '%d. Quitting. \n'", program[programPointer], programPointer);
+               freeStack(stack, 's');
+               return 1;
         }
     }
+
+    // transcribe the outputs to a string in reverse order, starting from the latest output
+    *result = malloc(sizeof(char)*(outputStack->count + 1));
+    (*result)[outputStack->count] = '\0';
+    void* oldHead = outputStack;
+    while (outputStack != NULL)
+    {
+        (*result)[outputStack->count - 1] = outputStack->content;
+        outputStack = outputStack->previous;
+    }
+
+    freeStack(oldHead, 'o');
+    return 0;
 }
+

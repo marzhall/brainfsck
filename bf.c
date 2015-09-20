@@ -12,6 +12,17 @@ int main(int argc, char** argv)
     }
 
     printf("\nRunning brainfuck interpretation. Output is:\n");
-    interpereter(argv[1]);
+    char** programOut = malloc(sizeof(char*));
+    int returnCode = interpereter(argv[1], programOut);
+    if (returnCode == 0)
+    {
+        printf(*programOut);
+    }
+    else
+    {
+        printf("There was a problem executing the program.\n");
+    }
+
+    printf("\n");
     exit(0);
 }
