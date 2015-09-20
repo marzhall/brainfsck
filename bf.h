@@ -115,7 +115,12 @@ int interpereter(char* program, char** result)
                     programPointer = bracketStack->location;
                 }
 
-                if (!breakEarly) bracketStack = bracketStack->previous;
+                if (!breakEarly)
+                {
+                    stackEntry* temp = bracketStack;
+                    bracketStack = bracketStack->previous;
+                    free(bracketStack);
+                }
             }
 
                 break;
@@ -148,6 +153,7 @@ int interpereter(char* program, char** result)
             default:
                printf("junk character '%c' at index '%d. Quitting. \n", program[programPointer], programPointer);
                freeStack(bracketStack, 's');
+               freeStack(outputStack, 'o');
                return 1;
         }
     }
