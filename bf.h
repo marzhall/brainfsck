@@ -25,6 +25,11 @@ typedef struct
 
 void freeStack(void* stack, char type)
 {
+    if (stack == NULL)
+    {
+        return;
+    }
+    
     switch (type)
     {
         case 'o':
@@ -141,8 +146,8 @@ int interpereter(char* program, char** result)
                 break;
             }
             default:
-               printf("junk character '%c' at index '%d. Quitting. \n'", program[programPointer], programPointer);
-               freeStack(stack, 's');
+               printf("junk character '%c' at index '%d. Quitting. \n", program[programPointer], programPointer);
+               freeStack(bracketStack, 's');
                return 1;
         }
     }
