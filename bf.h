@@ -43,6 +43,17 @@ void freeStack(void* stack, char type)
 
 int interpereter(char* program, char** result)
 {
+    if (program == NULL)
+    {
+        printf("Null program argument supplied to the interpereter.");
+        return 1;
+    }
+    if (!strcmp(program, ""))
+    {
+        printf("[Interpreter's note: Input was empty]");
+        return 0;
+    }
+
     int* stack = malloc(sizeof(int)*4096);
     int stackLocation = 0;
     stackEntry* bracketStack = NULL;
