@@ -119,7 +119,7 @@ int interpereter(char* program, char** result)
                 {
                     stackEntry* temp = bracketStack;
                     bracketStack = bracketStack->previous;
-                    free(bracketStack);
+                    free(temp);
                 }
             }
 
