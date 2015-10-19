@@ -9,6 +9,7 @@
 #define print '.'
 #define jumpForward '['
 #define jumpBack ']'
+#define grabInput ','
 
 typedef struct
 {
@@ -82,6 +83,22 @@ int interpereter(char* program, char** result)
                 break;
             case shiftr:
                 stackLocation++;
+                break;
+            case grabInput:
+            {
+                int x;
+                if (!scanf("%d", &x))
+                {
+                    char y;
+                    scanf("%c", &y);
+                    stack[stackLocation] = (int)y;
+                }
+                else
+                {
+                    stack[stackLocation] = x;
+                }
+
+            }
                 break;
             case print:
             {
