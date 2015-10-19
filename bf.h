@@ -86,11 +86,16 @@ int interpereter(char* program, char** result)
                 break;
             case grabInput:
             {
+                printf("[PROMPT] Enter a number or a character. In order to input a single-digit number as a character, type a period first, e.g. '.1'\n");
                 int x;
                 if (!scanf("%d", &x))
                 {
                     char y;
-                    scanf("%c", &y);
+                    if (!scanf(".%c", &y))
+                    {
+                        scanf("%c", &y);
+                    }
+
                     stack[stackLocation] = (int)y;
                 }
                 else
