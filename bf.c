@@ -24,5 +24,5 @@ int main(int argc, char** argv)
     }
 
     printf("\n");
-    exit(0);
+    exit(returnCode);
 }
