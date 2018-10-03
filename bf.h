@@ -51,7 +51,7 @@ void freeStack(void* stack, char type)
 
 }
 
-int interpereter(char* program, char** result)
+int interpereter(char* program, char** result, int** stackp)
 {
     if (program == NULL)
     {
@@ -64,7 +64,15 @@ int interpereter(char* program, char** result)
         return 0;
     }
 
-    int* stack = malloc(sizeof(int)*4096);
+    int* stack = NULL;
+    if (*stackp == NULL)
+    {
+        stack = malloc(sizeof(int)*4096);
+        *stackp = stack;
+    } else {
+        stack = *stackp;
+    }
+
     int stackLocation = 0;
     stackEntry* bracketStack = NULL;
     output* outputStack = NULL;
@@ -173,7 +181,7 @@ int interpereter(char* program, char** result)
                 break;
             }
             default:
-               printf("junk character '%c' at index '%d. Quitting. \n", program[programPointer], programPointer);
+               printf("junk character '%c' at index '%d for program:\n  %s.", program[programPointer], programPointer, program);
                freeStack(bracketStack, 's');
                freeStack(outputStack, 'o');
                return 1;
