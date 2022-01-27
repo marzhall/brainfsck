@@ -53,6 +53,7 @@ void freeStack(void* stack, char type)
 
 int interpereter(char* program, char** result, int** stackp)
 {
+    strcpy(*result, "\0");
     if (program == NULL)
     {
         printf("Null program argument supplied to the interpereter.");
@@ -60,7 +61,7 @@ int interpereter(char* program, char** result, int** stackp)
     }
     if (!strcmp(program, ""))
     {
-        printf("[Interpreter's note: Input was empty]");
+        printf("[Interpreter's note: Input was empty]\n");
         return 0;
     }
 

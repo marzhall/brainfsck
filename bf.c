@@ -30,15 +30,16 @@ int main(int argc, char** argv)
     // If we loop, stackp will hold the state of the 'tape.'
     int** stackp = malloc(sizeof(int*));
     *stackp = NULL;
-    char** programOut = malloc(sizeof(char*));
-    char* command = argv[optind];
+    char* programOut = malloc(sizeof(char*));
+    char* command = malloc(sizeof(char)*20000);
+    strncpy(command, argv[optind], sizeof(command));
     bool notargv = false;
     do
     {
-        returnCode = interpereter(command, programOut, stackp);
+        returnCode = interpereter(command, &programOut, stackp);
         if (returnCode == 0)
         {
-            printf(*programOut);
+            printf(programOut);
         }
         else
         {
